@@ -1,2 +1,7 @@
-# mytv-api
-IPTV Channels API in Node.js with Adonis framework
+# MYTV IPTV API
+
+Just a study project
+
+## Tecnologies
+
+Node.js with Adonis framework and SQLite3.
