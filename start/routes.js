@@ -31,8 +31,8 @@ Route.get('/users/:id', async ({ params }) => {
   const user = await User.query()
     .with('channels',
       c => c.where('active', true))
-    .where("id", params.id).first()
-  return user
+    .where("id", params.id).first();
+  return user;
 })
 
 Route.get('/channels', async () => {
