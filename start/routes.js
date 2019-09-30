@@ -1,4 +1,4 @@
-'use strict'
+"use strict";
 
 /*
 |--------------------------------------------------------------------------
@@ -14,28 +14,46 @@
 */
 
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
-const Route = use('Route')
-const User = use('App/Models/User')
-const Channel = use('App/Models/Channel')
+const Route = use("Route");
+const User = use("App/Models/User");
+const Channel = use("App/Models/Channel");
 
-Route.get('/', () => {
-  return { greeting: 'Hello world in JSON' }
-})
+Route.get("/", () => {
+  return { greeting: "Hello world in JSON" };
+});
 
-Route.get('/users', async () => {
-  const users = await User.query().orderBy("id", "asc").fetch()
-  return users
-})
+Route.post("/login", async ({ request }) => {
+  const data = request.only(["username", "password"]);
 
-Route.get('/users/:id', async ({ params }) => {
   const user = await User.query()
-    .with('channels',
-      c => c.where('active', true))
-    .where("id", params.id).first();
-  return user;
-})
+    .where("username", data.username)
+    .first();
 
-Route.get('/channels', async () => {
-  const channels = await Channel.query().orderBy("id", "asc").fetch()
-  return channels
-})
+  if (user) {
+    return user.password == data.password ? user : "Invalid password";
+  }
+
+  return "Sorry, user not found";
+});
+
+Route.get("/users", async () => {
+  const users = await User.query()
+    .orderBy("id", "asc")
+    .fetch();
+  return users;
+});
+
+Route.get("/users/:id", async ({ params }) => {
+  const user = await User.query()
+    .with("channels", c => c.where("active", true))
+    .where("id", params.id)
+    .first();
+  return user;
+});
+
+Route.get("/channels", async () => {
+  const channels = await Channel.query()
+    .orderBy("id", "asc")
+    .fetch();
+  return channels;
+});
